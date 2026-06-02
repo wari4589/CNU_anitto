@@ -1,0 +1,545 @@
+<!-- ═══════════════════════════════════════════
+     SCREEN: LOGIN
+═══════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-bg">
+    <div class="login-orb orb1"></div>
+    <div class="login-orb orb2"></div>
+    <div class="login-orb orb3"></div>
+  </div>
+  <div class="login-wrap">
+    <div class="login-logo-area">
+      <div class="login-logo">ANITTO</div>
+      <div class="login-tagline">ANA 마니또</div>
+    </div>
+    <div class="login-card glass">
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login" data-onclick="switchAuthTab('login')">로그인</button>
+        <button class="auth-tab" data-tab="signup" data-onclick="switchAuthTab('signup')">회원가입</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="form-login" class="auth-form active">
+        <div class="field-group">
+          <label class="field-label">이메일</label>
+          <input class="field-input" id="l-email" type="email" placeholder="이메일을 입력하세요" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">비밀번호</label>
+          <input class="field-input" id="l-pw" type="password" placeholder="비밀번호를 입력하세요" data-onkeydown="if(event.key==='Enter')tryLogin()">
+        </div>
+        <div class="login-err" id="login-err"></div>
+        <button class="btn-primary full" id="btn-login" data-onclick="tryLogin()">로그인</button>
+
+        <div class="divider-text">또는</div>
+        <button class="btn-secondary full" data-onclick="switchAuthTab('admin')">
+          <i class="ti ti-shield-lock"></i> 관리자로 입장
+        </button>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div id="form-signup" class="auth-form">
+        <div class="field-group">
+          <label class="field-label">이메일</label>
+          <input class="field-input" id="s-email" type="email" placeholder="이메일을 입력하세요" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">실명</label>
+          <input class="field-input" id="s-name" type="text" placeholder="실명을 입력하세요" autocomplete="off">
+          <div class="field-hint">모든 참가자에게 공개됩니다</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">닉네임</label>
+          <input class="field-input" id="s-nick" type="text" placeholder="닉네임을 입력하세요" autocomplete="off">
+          <div class="field-hint"> 엔딩 크레딧, 마니또, 관리자에게만 표시됩니다</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">비밀번호</label>
+          <input class="field-input" id="s-pw" type="password" placeholder="비밀번호 (6자 이상)">
+        </div>
+        <div class="login-err" id="signup-err"></div>
+        <button class="btn-primary full" id="btn-signup" data-onclick="trySignup()">가입하기</button>
+      </div>
+
+      <!-- ADMIN FORM -->
+      <div id="form-admin" class="auth-form">
+        <div class="admin-badge-row">
+          <div class="admin-badge"><i class="ti ti-shield-lock"></i> 관리자 전용</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">관리자 이메일</label>
+          <input class="field-input" id="a-email" type="email" placeholder="관리자 계정 이메일" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">계정 비밀번호</label>
+          <input class="field-input" id="a-pw" type="password" placeholder="계정 비밀번호" data-onkeydown="if(event.key==='Enter')tryAdminLogin()">
+          <div class="field-hint"></div>
+        </div>
+        <div class="login-err" id="admin-err"></div>
+        <button class="btn-primary full admin" data-onclick="tryAdminLogin()">
+          <i class="ti ti-lock-open"></i> 관리자 입장
+        </button>
+        <button class="btn-secondary full" data-onclick="switchAuthTab('login')" style="margin-top:8px">← 일반 로그인으로</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN: USER APP
+═══════════════════════════════════════════ -->
+<div id="screen-user" class="screen">
+
+  <!-- PAGES -->
+  <div id="page-home" class="page active">
+    <div class="page-scroll">
+      <!-- STATUS BAR SPACER -->
+      <div style="height:52px"></div>
+
+      <!-- TOP BAR -->
+      <div class="topbar">
+        <div class="topbar-title" id="u-greeting">안녕하세요</div>
+        <div class="topbar-actions">
+          <div class="icon-btn" data-onclick="openNotifPanel()" id="notif-bell">
+            <i class="ti ti-bell"></i>
+            <span class="badge-dot" id="notif-dot" style="display:none"></span>
+          </div>
+          <div class="icon-btn" data-onclick="toggleTheme()"><i class="ti ti-moon" id="theme-icon"></i></div>
+          <div class="icon-btn" data-onclick="confirmLogout()"><i class="ti ti-logout"></i></div>
+        </div>
+      </div>
+
+      <!-- HERO CARD -->
+      <div class="px16">
+        <div class="hero-card">
+          <div class="hero-bg-blob"></div>
+          <div class="hero-top">
+            <div>
+              <div class="hero-name" id="h-name">-</div>
+              <div class="hero-sub">마니또 게임 진행 중</div>
+            </div>
+            <div class="game-timer-pill" id="h-timer">-</div>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-icon">🏅</div>
+              <div class="hero-stat-val" id="h-score">0</div>
+              <div class="hero-stat-lbl">점수</div>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <div class="hero-stat-icon">🪙</div>
+              <div class="hero-stat-val" id="h-coin">0</div>
+              <div class="hero-stat-lbl">코인</div>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <div class="hero-stat-icon">📊</div>
+              <div class="hero-stat-val" id="h-rank">-</div>
+              <div class="hero-stat-lbl">순위</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK CARDS -->
+      <div class="px16">
+        <div class="quick-grid">
+          <div class="quick-card letter-card-bg" data-onclick="goPage('page-letters')">
+            <div class="quick-icon">✉️</div>
+            <div class="quick-val" id="h-letters">0</div>
+            <div class="quick-lbl">안 읽은 편지</div>
+            <div class="quick-badge" id="h-letters-badge" style="display:none">New</div>
+          </div>
+          <div class="quick-card coin-card-bg">
+            <div class="quick-icon">🔔</div>
+            <div class="quick-val" id="h-notif-count">0</div>
+            <div class="quick-lbl">새 알림</div>
+            <div class="quick-badge" id="h-notif-badge" style="display:none">New</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY MANITTO -->
+      <div class="px16">
+        <div class="section-title">나의 마니또</div>
+        <div class="card manitto-card">
+          <div class="manitto-inner">
+            <div class="manitto-lock-icon"><i class="ti ti-eye-off"></i></div>
+            <div class="manitto-name" id="manitto-reveal">???</div>
+            <div class="manitto-hint">게임 종료 후 공개됩니다</div>
+          </div>
+          <div class="manitto-actions">
+            <button class="btn-chip" data-onclick="goPage('page-letters')">
+              <i class="ti ti-send"></i> 편지 보내기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT NOTIFS -->
+      <div class="px16">
+        <div class="section-title">최근 알림</div>
+        <div class="card" id="home-notif-list"></div>
+      </div>
+
+      <div style="height:24px"></div>
+    </div>
+  </div><!-- /page-home -->
+
+  <!-- MISSIONS PAGE -->
+  <div id="page-missions" class="page">
+    <div class="page-scroll">
+      <div style="height:52px"></div>
+      <div class="topbar">
+        <div class="topbar-title">미션</div>
+        <div class="coin-pill"><i class="ti ti-coin"></i> <span id="m-coin">0</span></div>
+      </div>
+      <div class="px16">
+        <div class="segment-ctrl" id="mission-seg">
+          <button class="seg-btn active" data-onclick="filterMissions('active',this)">진행 중</button>
+          <button class="seg-btn" data-onclick="filterMissions('done',this)">완료</button>
+          <button class="seg-btn" data-onclick="filterMissions('all',this)">전체</button>
+        </div>
+        <div id="mission-list-container"></div>
+      </div>
+    </div>
+  </div><!-- /page-missions -->
+
+  <!-- LETTERS PAGE -->
+  <div id="page-letters" class="page">
+    <div class="page-scroll">
+      <div style="height:52px"></div>
+      <div class="topbar">
+        <div class="topbar-title">편지함</div>
+        <button class="btn-chip" data-onclick="openModal('write-letter')">
+          <i class="ti ti-pencil"></i> 편지 쓰기
+        </button>
+      </div>
+      <div class="px16">
+        <div id="letters-list-container"></div>
+      </div>
+    </div>
+  </div><!-- /page-letters -->
+
+  <!-- RANKING PAGE -->
+  <div id="page-rank" class="page">
+    <div class="page-scroll">
+      <div style="height:52px"></div>
+      <div class="topbar">
+        <div class="topbar-title">랭킹</div>
+      </div>
+      <div class="px16">
+        <div class="rank-delay-notice">
+          <i class="ti ti-clock"></i>
+          <div>점수 획득 후 10분~3시간 후 랭킹 반영 · 추리 방지 목적</div>
+        </div>
+        <div class="card" id="ranking-list"></div>
+
+        <!-- GUESS SECTION -->
+        <div class="section-title" style="margin-top:24px">추리 도전</div>
+        <div class="card guess-card">
+          <div class="guess-cost-row">
+            <div class="guess-cost-badge"><i class="ti ti-coin"></i> 100코인 소모</div>
+            <div class="guess-result-hint">성공: +100점 / 실패: -100점</div>
+          </div>
+          <div class="field-group" style="margin-top:12px">
+            <label class="field-label">누구를 추리할까요?</label>
+            <select class="field-select" id="guess-target">
+              <option value="">대상 선택</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">마니또라고 생각하는 사람은?</label>
+            <select class="field-select" id="guess-answer">
+              <option value="">추리 대상 선택</option>
+            </select>
+          </div>
+          <button class="btn-primary full" style="margin-top:8px" data-onclick="tryGuess()">
+            <i class="ti ti-brain"></i> 추리하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-rank -->
+
+  <!-- MEGAPHONE PAGE -->
+  <div id="page-mega" class="page">
+    <div class="page-scroll">
+      <div style="height:52px"></div>
+      <div class="topbar">
+        <div class="topbar-title">확성기</div>
+        <div class="coin-pill"><i class="ti ti-coin"></i> <span id="mega-coin">0</span></div>
+      </div>
+      <div class="px16">
+        <button class="btn-primary full" data-onclick="openModal('write-mega')" style="margin-bottom:14px">
+          <i class="ti ti-speakerphone"></i> 확성기 보내기 (50코인)
+        </button>
+        <div class="segment-ctrl">
+          <button class="seg-btn active" data-onclick="filterMega('latest',this)">최신</button>
+          <button class="seg-btn" data-onclick="filterMega('popular',this)">인기</button>
+        </div>
+        <div id="mega-list-container"></div>
+      </div>
+    </div>
+  </div><!-- /page-mega -->
+
+  <!-- TAB BAR -->
+  <nav class="tab-bar" id="user-tabbar">
+    <div class="tab-item active" data-onclick="goPage('page-home',this)">
+      <i class="ti ti-home-2"></i><span>홈</span>
+    </div>
+    <div class="tab-item" data-onclick="goPage('page-missions',this)">
+      <i class="ti ti-checklist"></i><span>미션</span>
+    </div>
+    <div class="tab-item" data-onclick="goPage('page-letters',this)">
+      <i class="ti ti-mail"></i><span>편지함</span>
+      <span class="tab-badge" id="tab-letter-badge" style="display:none">0</span>
+    </div>
+    <div class="tab-item" data-onclick="goPage('page-rank',this)">
+      <i class="ti ti-trophy"></i><span>랭킹</span>
+    </div>
+    <div class="tab-item" data-onclick="goPage('page-mega',this)">
+      <i class="ti ti-speakerphone"></i><span>확성기</span>
+    </div>
+  </nav>
+
+</div><!-- /screen-user -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN: ADMIN
+═══════════════════════════════════════════ -->
+<div id="screen-admin" class="screen">
+
+  <!-- ADMIN TOP BAR -->
+  <div class="admin-header">
+    <div class="admin-header-inner">
+      <div>
+        <div class="admin-header-title">
+          <i class="ti ti-shield-lock"></i> 관리자 패널
+        </div>
+        <div class="admin-header-sub">MANITTO Admin</div>
+      </div>
+      <button class="btn-ghost-sm" data-onclick="confirmLogout()">
+        <i class="ti ti-logout"></i> 로그아웃
+      </button>
+    </div>
+  </div>
+
+  <!-- ADMIN PAGES -->
+  <div id="apage-dash" class="page active" style="padding-top:72px">
+    <div class="page-scroll">
+      <div class="px16">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-val" id="a-stat-users">-</div>
+            <div class="stat-lbl">👤 참가자</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="a-stat-status">-</div>
+            <div class="stat-lbl">🎮 상태</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="a-stat-days">-</div>
+            <div class="stat-lbl">⏳ 남은 기간</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="a-stat-missions">-</div>
+            <div class="stat-lbl">🎯 총 미션</div>
+          </div>
+        </div>
+
+        <div class="section-title">게임 제어</div>
+        <div class="card toggle-card">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">참가 신청 허용</div>
+              <div class="toggle-sub">신규 참가자 가입 가능</div>
+            </div>
+            <label class="ios-toggle">
+              <input type="checkbox" id="toggle-signup" checked data-onchange="handleToggle('signup',this)">
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">랭킹 공개</div>
+              <div class="toggle-sub">참가자에게 랭킹 표시</div>
+            </div>
+            <label class="ios-toggle">
+              <input type="checkbox" id="toggle-ranking" checked data-onchange="handleToggle('ranking',this)">
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">확성기 활성화</div>
+              <div class="toggle-sub">메시지 발송 가능</div>
+            </div>
+            <label class="ios-toggle">
+              <input type="checkbox" id="toggle-mega" checked data-onchange="handleToggle('mega',this)">
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-title">게임 관리</div>
+        <div class="card action-card">
+          <button class="btn-action success" data-onclick="adminAction('start')">
+            <i class="ti ti-player-play-filled"></i>
+            <div><div>게임 시작 및 마니또 배정</div><div class="btn-action-sub">참가자 랜덤 순환 배정</div></div>
+          </button>
+          <button class="btn-action danger" data-onclick="adminAction('end')">
+            <i class="ti ti-flag-filled"></i>
+            <div><div>게임 종료 및 엔딩 크레딧</div><div class="btn-action-sub">엔딩 크레딧 활성화</div></div>
+          </button>
+          <button class="btn-action neutral" data-onclick="adminAction('ending')">
+            <i class="ti ti-presentation-analytics"></i>
+            <div><div>엔딩 크레딧 미리보기</div><div class="btn-action-sub">7부 연출 확인</div></div>
+          </button>
+          <button class="btn-action neutral" data-onclick="adminAction('reset')">
+            <i class="ti ti-refresh"></i>
+            <div><div>게임 초기화</div><div class="btn-action-sub">모든 데이터 삭제</div></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="apage-users" class="page" style="padding-top:72px">
+    <div class="page-scroll">
+      <div class="px16">
+        <div class="topbar" style="padding-top:0;position:static">
+          <div class="topbar-title" style="font-size:22px">참가자 관리</div>
+          <div class="badge-count" id="a-user-count">-</div>
+        </div>
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input class="search-input" placeholder="닉네임으로 검색" data-oninput="filterUsers(this.value)">
+        </div>
+        <div class="notice-box">
+          <i class="ti ti-info-circle"></i>
+          관리자는 닉네임만 조회 가능합니다. 실명은 보호됩니다.
+        </div>
+        <div class="card" id="admin-user-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="apage-missions" class="page" style="padding-top:72px">
+    <div class="page-scroll">
+      <div class="px16">
+        <div class="topbar" style="padding-top:0;position:static">
+          <div class="topbar-title" style="font-size:22px">미션 관리</div>
+          <button class="btn-chip" data-onclick="openAdminModal('add-mission')">
+            <i class="ti ti-plus"></i> 추가
+          </button>
+        </div>
+        <div id="admin-mission-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="apage-ending" class="page" style="padding-top:72px">
+    <div class="page-scroll">
+      <div class="px16">
+        <div class="topbar" style="padding-top:0;position:static">
+          <div class="topbar-title" style="font-size:22px">엔딩 크레딧</div>
+          <button class="btn-chip success" data-onclick="launchEnding()">
+            <i class="ti ti-presentation"></i> 재생
+          </button>
+        </div>
+        <div class="notice-box success-notice">
+          <i class="ti ti-sparkles"></i>
+          공개 동의된 항목만 엔딩 크레딧에 표시됩니다.
+        </div>
+        <div class="section-title">미션 명장면 선택</div>
+        <div class="card" id="admin-ending-missions"></div>
+        <div class="section-title" style="margin-top:16px">베스트 편지 선택</div>
+        <div class="card" id="admin-ending-letters"></div>
+        <div class="section-title" style="margin-top:16px">히든 미션 (특별상)</div>
+        <div class="card" id="admin-hidden-missions">
+          <div class="list-item">
+            <div class="list-info">
+              <div class="list-name">🏆 추리왕</div>
+              <div class="list-sub">추리를 가장 많이 성공한 사람 +500점</div>
+            </div>
+            <label class="ios-toggle"><input type="checkbox" checked><span class="ios-slider"></span></label>
+          </div>
+          <div class="list-item">
+            <div class="list-info">
+              <div class="list-name">🏆 확성기왕</div>
+              <div class="list-sub">확성기 좋아요 1등 +500점</div>
+            </div>
+            <label class="ios-toggle"><input type="checkbox" checked><span class="ios-slider"></span></label>
+          </div>
+          <div class="list-item" style="border:none">
+            <button class="btn-ghost-sm" data-onclick="openAdminModal('add-hidden')">
+              <i class="ti ti-plus"></i> 히든 미션 추가
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN TAB BAR -->
+  <nav class="tab-bar" id="admin-tabbar">
+    <div class="tab-item active" data-onclick="goAdminPage('apage-dash',this)">
+      <i class="ti ti-layout-dashboard"></i><span>대시보드</span>
+    </div>
+    <div class="tab-item" data-onclick="goAdminPage('apage-users',this)">
+      <i class="ti ti-users"></i><span>참가자</span>
+    </div>
+    <div class="tab-item" data-onclick="goAdminPage('apage-missions',this)">
+      <i class="ti ti-checklist"></i><span>미션</span>
+    </div>
+    <div class="tab-item" data-onclick="goAdminPage('apage-ending',this)">
+      <i class="ti ti-sparkles"></i><span>엔딩</span>
+    </div>
+  </nav>
+
+</div><!-- /screen-admin -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN: ENDING CREDITS
+═══════════════════════════════════════════ -->
+<div id="screen-ending" class="screen">
+  <div class="ending-bg">
+    <div class="ending-stars" id="ending-stars"></div>
+  </div>
+  <div class="ending-content" id="ending-content">
+    <!-- Rendered by JS -->
+  </div>
+  <button class="ending-close" data-onclick="closeEnding()">
+    <i class="ti ti-x"></i>
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NOTIFICATION PANEL
+═══════════════════════════════════════════ -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-panel-header">
+    <div class="notif-panel-title">알림</div>
+    <button class="btn-ghost-sm" data-onclick="closeNotifPanel()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="notif-panel-list" id="notif-panel-list"></div>
+</div>
+<div class="overlay" id="notif-overlay" data-onclick="closeNotifPanel()"></div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" data-onclick="closeModalIfBg(event)">
+  <div class="modal-sheet" id="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TOAST
+═══════════════════════════════════════════ -->
+<div class="toast-wrap" id="toast-wrap"></div>
