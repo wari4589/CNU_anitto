@@ -327,19 +327,40 @@ function filterMissions(f, btn) {
   renderMissions(f);
 }
 
+function updateMissionSummary() {
+  const active = _missions.filter(m => !m.completed).length;
+  const done = _missions.filter(m => m.completed).length;
+  setText('mission-active-count', active);
+  setText('mission-done-count', done);
+  setText('mission-total-count', _missions.length);
+}
+
+function missionEmptyState(filter) {
+  const title = filter === 'done' ? '완료한 미션이 없습니다' : '진행 중인 미션이 없습니다';
+  const desc = filter === 'done'
+    ? '아직 완료 처리된 미션이 없습니다.'
+    : '새 미션이 열리면 이곳에 바로 표시됩니다.';
+
+  return `
+    <div class="mission-empty empty-state">
+      <div class="empty-state-icon"><i class="ti ti-target-arrow"></i></div>
+      <div class="empty-state-title">${title}</div>
+      <div class="empty-state-desc">${desc}</div>
+    </div>`;
+}
+
 function renderMissions(filter = 'active') {
   const container = document.getElementById('mission-list-container');
   if (!container) return;
+
+  updateMissionSummary();
 
   let list = _missions;
   if (filter === 'active') list = _missions.filter(m => !m.completed);
   if (filter === 'done')   list = _missions.filter(m => m.completed);
 
   if (!list.length) {
-    container.innerHTML = emptyState(
-      filter === 'done' ? '완료한 미션이 없습니다' : '진행 중인 미션이 없습니다',
-      '🎯'
-    );
+    container.innerHTML = missionEmptyState(filter);
     return;
   }
 
@@ -1052,9 +1073,9 @@ function renderMissionSkeleton(container) {
     </div>`).join('') + '</div>';
 }
 function emptyState(msg, icon = '📭') {
-  return `<div style="padding:40px;text-align:center;color:var(--text3)">
-    <div style="font-size:40px;margin-bottom:10px">${icon}</div>
-    <div style="font-size:14px">${msg}</div>
+  return `<div class="empty-state">
+    <div class="empty-state-icon">${icon}</div>
+    <div class="empty-state-title">${msg}</div>
   </div>`;
 }
 function errorState(msg) {

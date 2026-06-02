@@ -197,6 +197,26 @@
         <div class="coin-pill"><i class="ti ti-coin"></i> <span id="m-coin">0</span></div>
       </div>
       <div class="px16">
+        <div class="mission-summary">
+          <div class="mission-summary-copy">
+            <div class="mission-summary-kicker">MISSION BOARD</div>
+            <div class="mission-summary-title">오늘의 미션</div>
+          </div>
+          <div class="mission-summary-stats">
+            <div class="mission-stat">
+              <span id="mission-active-count">0</span>
+              <small>진행</small>
+            </div>
+            <div class="mission-stat">
+              <span id="mission-done-count">0</span>
+              <small>완료</small>
+            </div>
+            <div class="mission-stat">
+              <span id="mission-total-count">0</span>
+              <small>전체</small>
+            </div>
+          </div>
+        </div>
         <div class="segment-ctrl" id="mission-seg">
           <button class="seg-btn active" data-onclick="filterMissions('active',this)">진행 중</button>
           <button class="seg-btn" data-onclick="filterMissions('done',this)">완료</button>

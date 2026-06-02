@@ -88,6 +88,10 @@ input, select, textarea { font-family: inherit; }
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(var(--tab-h) + 12px);
 }
+#screen-user .page-scroll {
+  width: min(100%, 520px);
+  margin: 0 auto;
+}
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -220,19 +224,52 @@ input, select, textarea { font-family: inherit; }
 
 /* ─── SEGMENT CONTROL ────────────────── */
 .segment-ctrl {
-  display: flex; background: var(--bg2); border-radius: 10px;
-  padding: 3px; margin-bottom: 14px;
-  transition: background var(--trans);
+  display: flex; background: rgba(23,32,51,0.06); border-radius: 999px;
+  padding: 4px; margin-bottom: 14px;
+  border: .5px solid var(--border);
+  transition: background var(--trans), border-color var(--trans);
 }
 .seg-btn {
-  flex: 1; padding: 7px 4px; border-radius: 8px; border: none;
+  flex: 1; min-height: 36px; padding: 8px 4px; border-radius: 999px; border: none;
   font-size: 13px; font-weight: 600; cursor: pointer;
   background: transparent; color: var(--text2);
   transition: all .2s;
 }
-.seg-btn.active { background: var(--card); color: var(--text); box-shadow: 0 1px 8px rgba(0,0,0,.1); }
+.seg-btn.active { background: var(--card); color: var(--accent); box-shadow: 0 6px 18px rgba(23,32,51,.08); }
 
 /* ─── MISSION CARDS ──────────────────── */
+.mission-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin: 4px 0 12px; padding: 16px;
+  border-radius: var(--radius);
+  border: .5px solid var(--border);
+  background:
+    linear-gradient(135deg, rgba(15,118,110,.12), rgba(82,103,216,.08)),
+    var(--card);
+  box-shadow: var(--shadow);
+}
+.mission-summary-kicker {
+  font-size: 10px; font-weight: 800; letter-spacing: .7px; color: var(--accent);
+}
+.mission-summary-title {
+  margin-top: 4px; font-size: 20px; line-height: 1.15; font-weight: 800;
+  color: var(--text);
+}
+.mission-summary-stats {
+  display: grid; grid-template-columns: repeat(3, 48px); gap: 6px; flex-shrink: 0;
+}
+.mission-stat {
+  min-height: 52px; border-radius: 14px;
+  background: rgba(255,255,255,.68);
+  border: .5px solid rgba(255,255,255,.7);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.mission-stat span { font-size: 17px; line-height: 1; font-weight: 800; color: var(--text); }
+.mission-stat small { margin-top: 4px; font-size: 10px; font-weight: 700; color: var(--text2); }
+[data-theme="dark"] .mission-stat {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.08);
+}
 .mission-item {
   padding: 16px;
   border-bottom: .5px solid var(--border);
@@ -261,6 +298,37 @@ input, select, textarea { font-family: inherit; }
 .btn-complete.active { background: var(--accent); color: #fff; }
 .btn-complete.active:active { transform: scale(.97); }
 .btn-complete.done { background: var(--bg); color: var(--text3); border: .5px solid var(--border); cursor: default; }
+
+.empty-state {
+  margin: 12px 0 0; padding: 34px 22px;
+  text-align: center; color: var(--text2);
+  border-radius: var(--radius-lg);
+  border: .5px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72)),
+    var(--card);
+  box-shadow: var(--shadow);
+}
+.empty-state-icon {
+  width: 58px; height: 58px; margin: 0 auto 14px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-dim); color: var(--accent);
+  font-size: 30px;
+}
+.empty-state-icon i { font-size: 30px; }
+.empty-state-title {
+  font-size: 16px; line-height: 1.35; font-weight: 800; color: var(--text);
+}
+.empty-state-desc {
+  max-width: 260px; margin: 8px auto 0;
+  font-size: 13px; line-height: 1.55; color: var(--text2);
+}
+
+@media (max-width: 360px) {
+  .mission-summary { align-items: flex-start; flex-direction: column; }
+  .mission-summary-stats { width: 100%; grid-template-columns: repeat(3, 1fr); }
+}
 
 /* ─── LETTER CARDS ───────────────────── */
 .letter-item { padding: 18px; border-bottom: .5px solid var(--border); }
