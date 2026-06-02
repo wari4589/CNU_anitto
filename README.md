@@ -103,9 +103,15 @@ ADMIN_EMAILS=admin@example.com,owner@example.com
 
 ## Supabase 설정
 
-이 저장소에는 Supabase 스키마가 자동으로 생성되지 않습니다.
+이 저장소에는 Supabase 초기 스키마 SQL이 포함되어 있습니다.
 
-Supabase Dashboard의 SQL Editor 또는 Supabase CLI migration으로 필요한 테이블과 RLS 정책을 만들어야 합니다.
+Supabase Dashboard의 SQL Editor에서 아래 파일 내용을 실행하세요.
+
+```text
+supabase/migrations/001_init.sql
+```
+
+또는 Supabase CLI를 쓰는 경우 migration으로 적용합니다.
 
 앱이 기대하는 주요 테이블:
 
