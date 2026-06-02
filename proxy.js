@@ -1,5 +1,17 @@
 import { NextResponse } from "next/server";
 
+function createNonce() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+
+  return btoa(binary);
+}
+
 function buildCsp(nonce) {
   const isDev = process.env.NODE_ENV !== "production";
   const directives = [
@@ -28,7 +40,7 @@ function buildCsp(nonce) {
 }
 
 export function proxy(request) {
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const nonce = createNonce();
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
 

@@ -83,6 +83,29 @@ ADMIN_PROFILE_ID=
 - `SUPABASE_SERVICE_ROLE_KEY`와 `ADMIN_SESSION_SECRET`은 브라우저에 노출되면 안 됩니다.
 - 공개 저장소에는 실제 Supabase key를 올리지 마세요.
 
+## Vercel 배포 체크리스트
+
+Vercel은 로컬의 `.env.local` 파일을 자동으로 가져가지 않습니다.
+
+Vercel Dashboard에서 Project Settings → Environment Variables에 아래 값을 직접 추가하세요.
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_SESSION_SECRET`
+- `ADMIN_EMAILS`
+- `ADMIN_PROFILE_ID`는 필요할 때만 추가
+
+환경변수를 추가하거나 수정한 뒤에는 반드시 다시 배포해야 합니다.
+
+```bash
+git push
+```
+
+또는 Vercel Dashboard에서 Redeploy를 실행합니다.
+
+Supabase Auth에서 이메일 확인/리다이렉트를 쓰는 경우 Supabase Dashboard의 Auth URL 설정에 Vercel 배포 도메인을 추가하세요.
+
 ## 관리자 인증 방식
 
 관리자 공용 비밀번호 방식은 제거했습니다.
