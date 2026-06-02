@@ -1,8 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+import { connection } from "next/server";
 import LegacyBoot from "./legacy/LegacyBoot";
 
-export default function Page() {
+export default async function Page() {
+  await connection();
+
   const markup = fs.readFileSync(
     path.join(process.cwd(), "app/legacy/markup.html"),
     "utf8"
