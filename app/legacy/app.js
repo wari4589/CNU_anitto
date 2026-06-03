@@ -120,6 +120,7 @@ function setLoading(on) {
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.querySelector('.auth-tabs')?.setAttribute('data-active', tab);
   document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
   document.getElementById(`form-${tab}`)?.classList.add('active');
   clearAuthErrors();
