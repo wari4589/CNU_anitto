@@ -570,6 +570,10 @@ input, select, textarea { font-family: inherit; }
   transform: translateY(-3px) scale(1.14);
 }
 .tab-item.active span { color: var(--accent); opacity: 1; transform: translateY(-1px); }
+body[data-current-screen="screen-login"] .tab-bar,
+.screen:not(.active) .tab-bar {
+  display: none;
+}
 .tab-badge {
   position: absolute; top: 3px; left: 50%; transform: translateX(8px);
   background: var(--red); color: #fff;
@@ -590,6 +594,11 @@ input, select, textarea { font-family: inherit; }
     linear-gradient(180deg, rgba(15,118,110,.08) 0%, rgba(82,103,216,.04) 42%, transparent 100%),
     linear-gradient(135deg, rgba(255,255,255,.72), rgba(231,236,239,.58));
 }
+[data-theme="dark"] .login-bg {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(15,118,110,.22), transparent 42%),
+    linear-gradient(180deg, #111827 0%, #0f172a 100%);
+}
 .login-orb {
   display: none;
   position: absolute; border-radius: 50%;
@@ -609,6 +618,18 @@ input, select, textarea { font-family: inherit; }
   padding: 0 20px;
   display: flex; flex-direction: column; align-items: center; gap: 16px;
 }
+.login-theme-toggle {
+  position: fixed; top: 18px; right: 18px; z-index: 2;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: .5px solid var(--border);
+  background: var(--card-glass); color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  transition: background var(--trans), color var(--trans), transform .15s;
+}
+.login-theme-toggle:active { transform: scale(.94); }
+.login-theme-toggle i { font-size: 20px; }
 .login-logo-area { text-align: center; margin-bottom: 4px; }
 .login-logo {
   font-size: 40px; font-weight: 800; letter-spacing: -2px;
@@ -625,6 +646,11 @@ input, select, textarea { font-family: inherit; }
   box-shadow: var(--shadow-lg);
 }
 .login-card { width: 100%; padding: 24px; }
+[data-theme="dark"] .login-card {
+  background: rgba(17,24,39,.92);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 22px 60px rgba(0,0,0,.38);
+}
 
 .auth-tabs {
   display: flex; background: var(--bg2);
@@ -637,6 +663,25 @@ input, select, textarea { font-family: inherit; }
   background: transparent; color: var(--text2); transition: all .2s;
 }
 .auth-tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 8px rgba(0,0,0,.1); }
+[data-theme="dark"] .auth-tabs {
+  background: rgba(255,255,255,.07);
+  border: .5px solid rgba(255,255,255,.08);
+}
+[data-theme="dark"] .auth-tab.active {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(0,0,0,.22);
+}
+[data-theme="dark"] .field-input,
+[data-theme="dark"] .field-select,
+[data-theme="dark"] .field-textarea {
+  background: rgba(15,23,42,.72);
+  border-color: rgba(255,255,255,.12);
+}
+[data-theme="dark"] .btn-secondary {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.10);
+}
 
 .auth-form { display: none; }
 .auth-form.active { display: block; }

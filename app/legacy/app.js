@@ -91,8 +91,10 @@ function applyTheme(t) {
   App.theme = t;
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem('manitto-theme', t);
-  const icon = document.getElementById('theme-icon');
-  if (icon) icon.className = t === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  ['theme-icon', 'login-theme-icon'].forEach(id => {
+    const icon = document.getElementById(id);
+    if (icon) icon.className = t === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  });
 }
 function toggleTheme() { applyTheme(App.theme === 'dark' ? 'light' : 'dark'); }
 
@@ -102,6 +104,7 @@ function toggleTheme() { applyTheme(App.theme === 'dark' ? 'light' : 'dark'); }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
+  document.body.dataset.currentScreen = id;
 }
 function setLoading(on) {
   // 로그인 버튼 비활성화로 로딩 표현
@@ -228,6 +231,24 @@ function confirmLogout() {
     onConfirm: doLogout,
   });
 }
+function resetUserNavigation() {
+  document.querySelectorAll('#screen-user .page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-home')?.classList.add('active');
+  document.querySelectorAll('#user-tabbar .tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelector('#user-tabbar .tab-item')?.classList.add('active');
+}
+function resetAdminNavigation() {
+  document.querySelectorAll('#screen-admin .page').forEach(p => p.classList.remove('active'));
+  document.getElementById('apage-dash')?.classList.add('active');
+  document.querySelectorAll('#admin-tabbar .tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelector('#admin-tabbar .tab-item')?.classList.add('active');
+}
+function resetUiForLogout() {
+  resetUserNavigation();
+  resetAdminNavigation();
+  closeNotifPanel();
+  switchAuthTab('login');
+}
 async function doLogout() {
   // Realtime 구독 해제
   App.realtimeSubs.forEach(sub => ManittoDB.client.removeChannel(sub));
@@ -237,7 +258,9 @@ async function doLogout() {
   App.session = App.profile = App.participant = App.gameSession = null;
   App.isAdmin = false;
   closeModal();
+  resetUiForLogout();
   clearAuthErrors();
+  setLoading(false);
   showScreen('screen-login');
 }
 
