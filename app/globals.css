@@ -661,6 +661,8 @@ body[data-current-screen="screen-login"] .tab-bar,
 }
 
 .auth-tabs {
+  --auth-pill-x: 4px;
+  --auth-pill-w: calc((100% - 8px) / 2);
   position: relative;
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -670,27 +672,25 @@ body[data-current-screen="screen-login"] .tab-bar,
   overflow: hidden;
   transition: background var(--trans);
 }
-.auth-tabs::before {
-  content: '';
+.auth-tab-indicator {
   position: absolute;
   top: 4px; bottom: 4px; left: 4px;
-  width: calc((100% - 8px) / 2);
+  width: var(--auth-pill-w);
   border-radius: 12px;
   background: var(--card);
   box-shadow: 0 6px 20px rgba(23,32,51,.10);
-  transform: translateX(0);
+  transform: translate3d(calc(var(--auth-pill-x) - 4px), 0, 0);
   transition:
     transform .34s cubic-bezier(.16,1,.3,1),
+    width .34s cubic-bezier(.16,1,.3,1),
     opacity .2s,
     background var(--trans),
     box-shadow var(--trans);
+  will-change: transform, width;
 }
-.auth-tabs[data-active="signup"]::before {
-  transform: translateX(100%);
-}
-.auth-tabs[data-active="admin"]::before {
+.auth-tabs[data-active="admin"] .auth-tab-indicator {
   opacity: 0;
-  transform: translateX(0) scaleX(.96);
+  transform: translate3d(calc(var(--auth-pill-x) - 4px), 0, 0) scaleX(.96);
 }
 .auth-tab {
   position: relative; z-index: 1;
@@ -710,7 +710,7 @@ body[data-current-screen="screen-login"] .tab-bar,
   background: rgba(255,255,255,.07);
   border: .5px solid rgba(255,255,255,.08);
 }
-[data-theme="dark"] .auth-tabs::before {
+[data-theme="dark"] .auth-tab-indicator {
   background: rgba(255,255,255,.14);
   box-shadow: 0 8px 22px rgba(0,0,0,.22);
 }
@@ -847,7 +847,7 @@ body[data-current-screen="screen-login"] .tab-bar,
   .auth-form,
   .auth-form.active,
   .auth-form.active > *,
-  .auth-tabs::before {
+  .auth-tab-indicator {
     animation: none;
     transition: none;
   }
