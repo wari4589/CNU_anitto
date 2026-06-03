@@ -117,12 +117,61 @@ function setLoading(on) {
 /* ═══════════════════════════════════════════════════════════
    AUTH — 탭 전환
 ═══════════════════════════════════════════ */
+const AUTH_TAB_ORDER = ['login', 'signup', 'admin'];
+let _authTransitionTimer = null;
+
 function switchAuthTab(tab) {
+  const tabs = document.querySelector('.auth-tabs');
+  const stage = document.getElementById('auth-form-stage');
+  const current = document.querySelector('.auth-form.active');
+  const next = document.getElementById(`form-${tab}`);
+  if (!next) return;
+
+  const currentTab = current?.id?.replace('form-', '') || stage?.dataset.active || 'login';
+  const currentIndex = AUTH_TAB_ORDER.indexOf(currentTab);
+  const nextIndex = AUTH_TAB_ORDER.indexOf(tab);
+  const direction = nextIndex >= currentIndex ? 'forward' : 'back';
+
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-  document.querySelector('.auth-tabs')?.setAttribute('data-active', tab);
+  tabs?.setAttribute('data-active', tab);
   document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
-  document.getElementById(`form-${tab}`)?.classList.add('active');
+
+  if (current === next) {
+    stage?.setAttribute('data-active', tab);
+    clearAuthErrors();
+    return;
+  }
+
+  clearTimeout(_authTransitionTimer);
+  document.querySelectorAll('.auth-form.leaving').forEach(f => f.classList.remove('leaving'));
+
+  const canAnimate = stage && current && stage.getClientRects().length > 0 && stage.offsetHeight > 0;
+  if (canAnimate) {
+    const currentHeight = Math.max(stage.offsetHeight, current?.scrollHeight || 0);
+    const nextHeight = next.scrollHeight;
+    stage.dataset.active = tab;
+    stage.dataset.direction = direction;
+    stage.style.height = `${currentHeight}px`;
+    stage.offsetHeight;
+
+    current?.classList.add('leaving');
+    current?.classList.remove('active');
+    next.classList.add('active');
+
+    requestAnimationFrame(() => {
+      stage.style.height = `${nextHeight}px`;
+    });
+
+    _authTransitionTimer = setTimeout(() => {
+      document.querySelectorAll('.auth-form.leaving').forEach(f => f.classList.remove('leaving'));
+      stage.style.height = '';
+    }, 430);
+  } else {
+    stage?.setAttribute('data-active', tab);
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    next.classList.add('active');
+  }
+
   clearAuthErrors();
 }
 function clearAuthErrors() {

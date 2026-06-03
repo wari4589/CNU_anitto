@@ -728,21 +728,59 @@ body[data-current-screen="screen-login"] .tab-bar,
   border-color: rgba(255,255,255,.10);
 }
 
-.auth-form { display: none; }
-.auth-form.active {
+.auth-form-stage {
+  position: relative;
+  overflow: hidden;
+  transition: height .38s cubic-bezier(.16,1,.3,1);
+  will-change: height;
+}
+.auth-form {
   display: block;
-  animation: authFormIn .26s cubic-bezier(.16,1,.3,1) both;
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(18px) scale(.992);
+  filter: blur(3px);
+  transition:
+    opacity .28s ease,
+    transform .38s cubic-bezier(.16,1,.3,1),
+    filter .32s ease;
+  will-change: opacity, transform, filter;
+}
+.auth-form-stage[data-direction="back"] .auth-form {
+  transform: translateX(-18px) scale(.992);
+}
+.auth-form.active {
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+  filter: blur(0);
+}
+.auth-form.leaving {
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-18px) scale(.992);
+  filter: blur(3px);
+}
+.auth-form-stage[data-direction="back"] .auth-form.leaving {
+  transform: translateX(18px) scale(.992);
 }
 .auth-form.active > * {
-  animation: authItemIn .32s cubic-bezier(.16,1,.3,1) both;
+  animation: authItemIn .34s cubic-bezier(.16,1,.3,1) both;
 }
-.auth-form.active > :nth-child(1) { animation-delay: .03s; }
-.auth-form.active > :nth-child(2) { animation-delay: .07s; }
-.auth-form.active > :nth-child(3) { animation-delay: .11s; }
-.auth-form.active > :nth-child(4) { animation-delay: .15s; }
-.auth-form.active > :nth-child(5) { animation-delay: .19s; }
-.auth-form.active > :nth-child(6) { animation-delay: .23s; }
-.auth-form.active > :nth-child(7) { animation-delay: .27s; }
+.auth-form.active > :nth-child(1) { animation-delay: .02s; }
+.auth-form.active > :nth-child(2) { animation-delay: .05s; }
+.auth-form.active > :nth-child(3) { animation-delay: .08s; }
+.auth-form.active > :nth-child(4) { animation-delay: .11s; }
+.auth-form.active > :nth-child(5) { animation-delay: .14s; }
+.auth-form.active > :nth-child(6) { animation-delay: .17s; }
+.auth-form.active > :nth-child(7) { animation-delay: .20s; }
 
 .login-card .field-input:focus {
   box-shadow: 0 0 0 4px rgba(15,118,110,.10);
@@ -805,6 +843,8 @@ body[data-current-screen="screen-login"] .tab-bar,
   .login-theme-toggle,
   .login-logo-area,
   .login-card,
+  .auth-form-stage,
+  .auth-form,
   .auth-form.active,
   .auth-form.active > *,
   .auth-tabs::before {
