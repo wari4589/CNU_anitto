@@ -837,7 +837,6 @@ async function adminAction(type) {
 function openAdminModal(type) {
   if (type === 'add-mission') {
     showModalRaw(`
-      <div class="modal-handle"></div>
       <div class="modal-title">새 미션 추가</div>
       <div class="field-group">
         <label class="field-label">미션 제목</label>
@@ -1004,7 +1003,6 @@ function openModal(type, opts = {}) {
   if (type === 'confirm') {
     _modalConfirmFn = opts.onConfirm;
     showModalRaw(`
-      <div class="modal-handle"></div>
       <div class="modal-title">${opts.title || ''}</div>
       <div class="modal-desc">${opts.desc || ''}</div>
       ${opts.extra || ''}
