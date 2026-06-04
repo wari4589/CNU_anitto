@@ -754,6 +754,9 @@ body[data-current-screen="screen-login"] .tab-bar,
 .auth-form-stage[data-direction="back"] .auth-form {
   transform: translateX(-18px) scale(.992);
 }
+.auth-form-stage[data-direction="back"] .auth-form.active {
+  transform: translateX(0) scale(1);
+}
 .auth-form.active {
   position: relative;
   z-index: 2;
