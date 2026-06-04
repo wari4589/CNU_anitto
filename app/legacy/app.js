@@ -1175,6 +1175,8 @@ function setupDeclarativeEvents() {
   });
 
   document.addEventListener('keydown', event => {
+    if (handleAuthEnter(event)) return;
+
     const command = event.target.dataset?.onkeydown;
     if (command) runDeclarativeCommand(command, event, event.target);
   });
@@ -1188,6 +1190,20 @@ function setupDeclarativeEvents() {
     const command = event.target.dataset?.oninput;
     if (command) runDeclarativeCommand(command, event, event.target);
   });
+}
+
+function handleAuthEnter(event) {
+  if (event.key !== 'Enter') return false;
+  if (!(event.target instanceof HTMLInputElement)) return false;
+
+  const form = event.target.closest('.auth-form.active');
+  if (!form) return false;
+
+  event.preventDefault();
+  if (form.id === 'form-login') tryLogin();
+  if (form.id === 'form-signup') trySignup();
+  if (form.id === 'form-admin') tryAdminLogin();
+  return true;
 }
 
 function handleDataAction(action, event, el) {
