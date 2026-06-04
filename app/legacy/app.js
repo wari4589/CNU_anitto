@@ -35,7 +35,6 @@ function avatarColor(str) {
 async function initApp() {
   setupDeclarativeEvents();
   applyTheme(App.theme);
-  requestAnimationFrame(() => syncAuthTabIndicator());
   setLoading(true);
 
   // 기존 세션 복원
@@ -121,19 +120,6 @@ function setLoading(on) {
 const AUTH_TAB_ORDER = ['login', 'signup', 'admin'];
 let _authTransitionTimer = null;
 
-function syncAuthTabIndicator(tab) {
-  const tabs = document.querySelector('.auth-tabs');
-  const activeTab = tab || tabs?.dataset.active || 'login';
-  const activeButton = tabs?.querySelector(`[data-tab="${activeTab}"]`)
-    || tabs?.querySelector('.auth-tab.active');
-  if (!tabs || !activeButton) return;
-
-  const tabsRect = tabs.getBoundingClientRect();
-  const buttonRect = activeButton.getBoundingClientRect();
-  tabs.style.setProperty('--auth-pill-x', `${buttonRect.left - tabsRect.left}px`);
-  tabs.style.setProperty('--auth-pill-w', `${buttonRect.width}px`);
-}
-
 function switchAuthTab(tab) {
   const tabs = document.querySelector('.auth-tabs');
   const stage = document.getElementById('auth-form-stage');
@@ -149,7 +135,6 @@ function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   tabs?.setAttribute('data-active', tab);
   document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
-  syncAuthTabIndicator(tab);
 
   if (current === next) {
     stage?.setAttribute('data-active', tab);
@@ -1203,8 +1188,6 @@ function setupDeclarativeEvents() {
     const command = event.target.dataset?.oninput;
     if (command) runDeclarativeCommand(command, event, event.target);
   });
-
-  window.addEventListener('resize', () => syncAuthTabIndicator(), { passive: true });
 }
 
 function handleDataAction(action, event, el) {

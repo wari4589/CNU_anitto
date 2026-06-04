@@ -661,8 +661,6 @@ body[data-current-screen="screen-login"] .tab-bar,
 }
 
 .auth-tabs {
-  --auth-pill-x: 4px;
-  --auth-pill-w: calc((100% - 8px) / 2);
   position: relative;
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -675,22 +673,24 @@ body[data-current-screen="screen-login"] .tab-bar,
 .auth-tab-indicator {
   position: absolute;
   top: 4px; bottom: 4px; left: 4px;
-  width: var(--auth-pill-w);
+  width: calc(50% - 4px);
   border-radius: 12px;
   background: var(--card);
   box-shadow: 0 6px 20px rgba(23,32,51,.10);
-  transform: translate3d(calc(var(--auth-pill-x) - 4px), 0, 0);
   transition:
-    transform .34s cubic-bezier(.16,1,.3,1),
+    left .34s cubic-bezier(.16,1,.3,1),
     width .34s cubic-bezier(.16,1,.3,1),
     opacity .2s,
     background var(--trans),
     box-shadow var(--trans);
-  will-change: transform, width;
+  will-change: left, width;
+}
+.auth-tabs[data-active="signup"] .auth-tab-indicator {
+  left: 50%;
 }
 .auth-tabs[data-active="admin"] .auth-tab-indicator {
   opacity: 0;
-  transform: translate3d(calc(var(--auth-pill-x) - 4px), 0, 0) scaleX(.96);
+  left: 4px;
 }
 .auth-tab {
   position: relative; z-index: 1;
