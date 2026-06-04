@@ -787,6 +787,22 @@ body[data-current-screen="screen-login"] .tab-bar,
 .auth-form.active > :nth-child(6) { animation-delay: .17s; }
 .auth-form.active > :nth-child(7) { animation-delay: .20s; }
 
+@media (prefers-reduced-motion: reduce) {
+  .auth-tab-indicator,
+  .auth-form-stage,
+  .auth-form {
+    transition: none;
+  }
+  .auth-form,
+  .auth-form-stage[data-direction="back"] .auth-form {
+    transform: none;
+    filter: none;
+  }
+  .auth-form.active > * {
+    animation: none;
+  }
+}
+
 .login-card .field-input:focus {
   box-shadow: 0 0 0 4px rgba(15,118,110,.10);
 }
